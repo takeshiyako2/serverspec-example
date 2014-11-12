@@ -38,8 +38,10 @@ task :serverspec => 'serverspec:all'
 namespace :serverspec do
   task :all => hosts.map {|h| 'serverspec:' + h[:hostname] }
   hosts.each do |host|
-    desc "Run serverspec to #{host[:ip_address]}"
     RSpec::Core::RakeTask.new(host[:hostname].to_sym) do |t|
+      print "\e[33m"
+      puts "Run serverspec to #{host[:ip_address]}"
+      print "\e[0m"
       ENV['TARGET_HOST'] = host[:ip_address]
       t.pattern = 'spec/{' + host[:roles].join(',') + '}_spec.rb'
     end
